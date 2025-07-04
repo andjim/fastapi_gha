@@ -2,7 +2,7 @@ name: Basic Image Build
 
 on:
   push:
-    - master
+    branches: [master]
   pull_request:
     # I could also choose which branch PR triggers
 
