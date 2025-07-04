@@ -9,8 +9,9 @@ on:
 jobs:
   build-image:
     name: Build Image
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
 
       - name: Login Docker Hub
         uses: docker/login-action@v3
