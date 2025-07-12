@@ -1,4 +1,4 @@
-name: Basic Image Build
+name: 01 - Basic Image Build
 
 on:
   push:

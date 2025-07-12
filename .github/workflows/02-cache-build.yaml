@@ -1,4 +1,4 @@
-name: Basic Image Build
+name: 02 - Image Build with Caching
 
 on:
   push:
