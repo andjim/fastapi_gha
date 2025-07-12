@@ -33,4 +33,4 @@ jobs:
           tags: andjim/docker-ci-automation:latest,andjim/docker-ci-automation:01
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          platforms: linux/amd64,linux/arm64,linux/arm/v7 # With Qemu Atction previosly set, we now have available the param "platforms" where you can list the chosen architecture you want your images to be built in.
+          platforms: linux/amd64,linux/arm64,linux/arm/v7 # With Qemu Action previosly set, we now have available the param "platforms" where you can list the chosen architecture you want your images to be built in.
