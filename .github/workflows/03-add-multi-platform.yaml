@@ -13,6 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install Rust toolchain
+        run: |
+          curl https://sh.rustup.rs -sSf | sh -s -- -y
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
       # This action allows to build images using QEMU to emulate other architecture and build images for the chosen architecture
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v3

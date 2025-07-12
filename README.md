@@ -39,6 +39,8 @@ This workflow builds on the basic workflow by adding build caching, which can si
 This workflow extends the previous ones by enabling multi-platform builds. This means the Docker image can be built for multiple CPU architectures (e.g., x86_64, ARM64, ARMv7), making it usable on a wider range of devices, such as Raspberry Pi or ARM-based cloud servers.
 
 **Additional Steps:**
+- **Install Rust toolchain:**  
+  This step installs the Rust programming language and its toolchain on the GitHub Actions runner. Some dependencies required for building multi-platform Docker images (especially when using QEMU for ARM architectures) are written in Rust, so having Rust available ensures that these dependencies can be compiled and used during the build process. The command also updates the system `PATH` so that Rust binaries are accessible in.
 - **docker/setup-qemu-action@v3:**  
   This step sets up QEMU, a hardware emulator that allows the GitHub Actions runner to build images for architectures different from its own. Without QEMU, you could only build images for the runner's native architecture.
 - **platforms:**  
