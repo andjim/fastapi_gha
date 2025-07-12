@@ -1,8 +1,8 @@
 FROM python:3.10-alpine
 
-RUN mkdir app
+RUN mkdir /app
 
-WORKDIR app
+WORKDIR /app
 
 COPY ./main.py  .
 COPY ./requirements.txt  .
