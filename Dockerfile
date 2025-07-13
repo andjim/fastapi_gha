@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.10-slim as base
 
 RUN mkdir /app
 
@@ -15,6 +15,12 @@ RUN apt-get update && apt-get install -y \
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-EXPOSE 8000
+FROM base as test
+# just a placeholder for test stage
+# you can add test dependencies here if needed
+RUN mkdir /test 
 
-CMD ["fastapi","run","main.py"]  
+FROM base as final
+
+EXPOSE 8000
+CMD ["fastapi","run","main.py"] 
