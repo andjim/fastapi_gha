@@ -1,3 +1,19 @@
+### 05-add-comment.yaml
+
+**Purpose:**  
+This workflow extends the previous ones by adding automated commenting on pull requests (PRs) with the results of the Docker image build. It ensures that contributors and reviewers are immediately informed about the image tags and labels generated for each PR, improving visibility and traceability in the CI process.
+
+**Additional Steps and Permissions:**
+- **permissions: pull-requests: write:**  
+  This permission is required so the workflow can create or update comments on pull requests. Without it, the workflow would not be able to interact with PRs.
+- **peter-evans/find-comment@v3:**  
+  This action searches for an existing comment (by the GitHub Actions bot) on the PR that includes a specific string. It helps avoid duplicate comments by finding and updating the relevant one.
+- **peter-evans/create-or-update-comment@v3:**  
+  This action creates a new comment or updates an existing one (found in the previous step) on the PR. The comment includes the Docker image tags and labels generated during the build, providing immediate feedback to PR authors and reviewers.
+  - The comment is only created or updated if the workflow is triggered by a pull request event.
+  - The comment body lists the image tags and labels, making it easy to track which images were built for the PR.
+
+This workflow helps automate communication in the PR process, ensuring that all stakeholders have up-to-date information about Docker image builds directly within the PR discussion.
 # Learning GHA and CI Automation with docker
 
 This repo is a "vile replication" of Bret Fisher's [docker-ci-automation](https://github.com/BretFisher/docker-ci-automation). It's me following step by step process on how to build a continuos integration workflow, which it's something I've interacted before, but with other tools and not me in the role of a CI workflow builder or maintainer (a simple developer hoping his PR not to fail any tests T.T). It's my first time working with Github Actions, so I'll be detailing the whats,whys, and hows of the workflows I'll be working with to be used for further references to whom might find it insterested (mostly for myself, please go check Bret Fisher's repo).
