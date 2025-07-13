@@ -60,7 +60,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         id: fc
         with:
-          issue-number: $${{ github.event.pull_request.number }}
+          issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
           body-includes: 'The image has been built successfully with the following tags:'
 
