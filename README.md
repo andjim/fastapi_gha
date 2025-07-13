@@ -89,3 +89,22 @@ This workflow extends the previous ones by adding automated commenting on pull r
   - `edit-mode: replace`: Ensures the comment is fully replaced with the latest build information, keeping the PR discussion clean and up to date.
 
 These steps ensure that every PR receives a single, always up-to-date comment with the latest Docker image build results, improving communication and transparency in the development workflow.
+
+### 06-add-cve-scanning.yaml
+
+**Purpose:**  
+This workflow extends the previous ones by adding automated scanning of the built Docker image for known vulnerabilities (CVEs) before pushing to Docker Hub. This ensures that images are checked for security issues as part of the CI process, increasing the security and reliability of published images.
+
+**Key Changes and Additional Steps:**
+- **Docker Build and export image for scanning:**  
+  Instead of immediately pushing the image, this step builds the Docker image and loads it into the local Docker daemon (`push: false`, `load: true`). The image is tagged with the GitHub run ID and built for the `linux/amd64` platform. This prepares the image for local scanning without publishing it.
+  - `target: test`: Optionally specifies a build stage to target (if using multi-stage builds).
+- **Scan image for vulnerabilities (`aquasecurity/trivy-action@master`):**  
+  This step uses Trivy to scan the locally built image for vulnerabilities (CVEs). The scan is performed before the image is pushed to Docker Hub.
+  - `image-ref: ${{ github.run_id }}`: Scans the image built and tagged in the previous step.
+  - `format: 'table'`: Outputs the scan results in a human-readable table format.
+  - `exit-code: '0'`: The workflow will not fail if vulnerabilities are found (set to `'1'` to fail on detection).
+- **Docker Build and Push to Docker Hub:**  
+  After scanning, the image is rebuilt (now for all target platforms) and pushed to Docker Hub with the appropriate tags and labels. This ensures only images that have been scanned are published.
+
+By introducing a vulnerability scan step before pushing images, this workflow helps catch security issues early and encourages best practices for container security in the CI/CD pipeline.
