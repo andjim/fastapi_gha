@@ -1,7 +1,10 @@
 version: '3.0'
 
 services:
-  app:
-    build: .
+  app-test:
+    build:
+      context: .
+      target: test
+
     ports:
       - "80:8000"
