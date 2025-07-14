@@ -1,4 +1,4 @@
-name: 07 - Image Build with CVE Scanning (blocking)
+name: 08 - Image Build with Unit Test
 
 on:
   push:
