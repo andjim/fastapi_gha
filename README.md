@@ -19,6 +19,8 @@ This workflow automates building and pushing a Docker image to Docker Hub on eve
   - The `push` parameter is set so that images are only pushed on non-pull request events (e.g., direct pushes to `master`), preventing unnecessary image uploads for PRs.
   - The `tags` parameter defines the tags for the built image, allowing you to version or label your images as needed.
 
+____
+
 ### 02-cache-build.yaml
 
 **Purpose:**  
@@ -32,6 +34,8 @@ This workflow builds on the basic workflow by adding build caching, which can si
   - `cache-from` tells Docker to use previously cached layers if available, speeding up builds by not rebuilding unchanged layers.
   - `cache-to` saves new layers to the cache after the build, so they can be reused in future builds.
   - `mode=max` ensures the most layers are cached, maximizing cache effectiveness.
+
+____
 
 ### 03-add-multi-platform.yaml
 
@@ -47,6 +51,8 @@ This workflow extends the previous ones by enabling multi-platform builds. This 
   The `platforms` parameter in the build step specifies which architectures to build for (e.g., `linux/amd64`, `linux/arm64`, `linux/arm/v7`).  
   - This is only possible because Buildx and QEMU are set up in previous steps.
   - Building for multiple platforms in one workflow ensures your image is compatible with a broader set of environments, which is important for open source projects or when targeting diverse deployment targets.
+
+____
 
 ### 04-add-metadata.yaml
 
@@ -68,6 +74,7 @@ This workflow builds upon the previous ones by adding automatic Docker image met
 
 This workflow helps maintain a consistent and automated tagging strategy for Docker images, making it easier to manage releases and deployments.
 
+____
 ### 05-add-comment.yaml
 
 **Purpose:**  
@@ -89,7 +96,7 @@ This workflow extends the previous ones by adding automated commenting on pull r
   - `edit-mode: replace`: Ensures the comment is fully replaced with the latest build information, keeping the PR discussion clean and up to date.
 
 These steps ensure that every PR receives a single, always up-to-date comment with the latest Docker image build results, improving communication and transparency in the development workflow.
-
+____
 ### 06-add-cve-scanning.yaml
 
 **Purpose:**  
@@ -108,7 +115,7 @@ This workflow extends the previous ones by adding automated scanning of the buil
   After scanning, the image is rebuilt (now for all target platforms) and pushed to Docker Hub with the appropriate tags and labels. This ensures only images that have been scanned are published.
 
 By introducing a vulnerability scan step before pushing images, this workflow helps catch security issues early and encourages best practices for container security in the CI/CD pipeline.
-
+____
 ### 07-add-cve-scanning-adv.yaml
 
 **Purpose:**  
@@ -139,3 +146,19 @@ This workflow introduces advanced vulnerability scanning and reporting for Docke
   Grants the workflow permission to upload security scan results to GitHub's Security tab, enabling automated vulnerability reporting and tracking.
 
 These additions make the workflow more robust by providing both immediate feedback on vulnerabilities and automated, actionable security reporting integrated with GitHub's native tools.
+____
+### 08-add-unit-test.yaml
+
+**Purpose:**  
+This workflow adds automated unit testing to the CI pipeline using Docker. It ensures that all unit tests are executed inside a containerized environment before the image is pushed, helping catch issues early and guaranteeing that the image is tested in the same environment as production.
+
+**New Steps and Features:**
+- **Docker Build and export to docker (test stage):**  
+  Builds the Docker image using the `test` stage, which includes all development and test dependencies, and loads it into the local Docker daemon. The image is tagged with the GitHub run ID and built for the `linux/amd64` platform.
+  - `target: test`: Uses the dedicated test stage in the Dockerfile, which installs test dependencies and copies test files.
+  - `load: true`: Loads the image into the local Docker daemon for running tests.
+- **Unit Testing in Docker:**  
+  Runs the container built in the previous step, executing the test suite (e.g., with pytest) as defined by the test stage's entrypoint. The workflow will fail if any test fails, preventing untested or broken code from being published.
+  - `docker run --rm ${{ github.run_id }}`: Runs the container and removes it after completion.
+
+By running tests inside the Docker image, this workflow ensures that tests are executed in an environment identical to production, increasing reliability and confidence in the build process.
