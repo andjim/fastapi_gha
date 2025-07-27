@@ -63,10 +63,10 @@ jobs:
       - name: Deploy to K3d
         run: |
           kubectl create secret docker-registry regcred \
-            --docker-server=ghcr.io \
+            --docker-server=https://ghcr.io \
             --docker-username=${{ github.actor }} \
-            --docker-password=${{ secrets.GHCR_TOKEN }} \
-          export TESTING_IMAGE="ghcr.io/andjim/docker-ci-automation:${{ github.run_id }}"
+            --docker-password=${{ secrets.GHCR_TOKEN }}
+          export TESTING_IMAGE=ghcr.io/andjim/docker-ci-automation:${{ github.run_id }}
           envsubst < manifests/deployment.yaml | kubectl apply -f -
           kubectl rollout status deployment dateapi
           kubectl exec deploy/dateapi -- curl --fail http://localhost:8000/ date
