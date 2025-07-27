@@ -66,7 +66,7 @@ jobs:
             --docker-server=https://ghcr.io \
             --docker-username=${{ github.actor }} \
             --docker-password=${{ secrets.GHCR_TOKEN }}
-          export TESTING_IMAGE=ghcr.io/andjim/docker-ci-automation:${{ github.run_id }}
+          export TESTING_IMAGE=ghcr.io/andjim/docker-ci-automation:"$GITHUB_RUN_ID"
           envsubst < manifests/deployment.yaml | kubectl apply -f -
           kubectl rollout status deployment dateapi
           kubectl logs deploy/dateapi
