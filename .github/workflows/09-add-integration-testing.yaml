@@ -1,4 +1,4 @@
-name: 08 - Image Build with Unit Test
+name: 09 - Image Build with Integration Testing
 
 on:
   push:
