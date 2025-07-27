@@ -1,29 +1,3 @@
-____
-### 10-add-k8s-test.yaml
-
-**Purpose:**  
-This workflow introduces automated smoke testing of the Docker image in a real Kubernetes environment using k3d. It ensures that the image can be deployed and started successfully in a Kubernetes cluster, and that basic functionality is verified before the image is pushed to Docker Hub.
-
-**New Steps and Features:**
-- **Login to GHCR:**  
-  Authenticates to GitHub Container Registry (GHCR) to push the built image for use in the Kubernetes cluster.
-- **Docker Build and push to GHCR:**  
-  Builds the Docker image using the `test` stage, tags it for GHCR, and pushes it to the registry. The image is also loaded locally for immediate use in the k3d cluster.
-  - `tags: ghcr.io/andjim/docker-ci-automation:${{ github.run_id }}`: Tags the image for the current run.
-  - `push: true`, `load: true`: Pushes to GHCR and loads locally for k3d.
-- **Setup K3d:**  
-  Uses the `AbsaOSS/k3d-action` to create a lightweight Kubernetes cluster in Docker for testing.
-  - `cluster-name: "test-cluster"`: Names the test cluster.
-  - `args`: Configures the cluster (e.g., disables default load balancer and metrics server).
-- **Deploy to K3d:**  
-  - Creates a Kubernetes secret for pulling the image from GHCR.
-  - Uses `envsubst` to inject the image tag into the deployment manifest.
-  - Applies the manifest and waits for the deployment to roll out.
-  - Runs a smoke test by executing a `curl` command inside the deployed pod to verify the `/date` endpoint is reachable and functional.
-- **Kubernetes Manifest:**  
-  A new `manifests/deployment.yaml` file defines the deployment for the application, using the image built in the workflow.
-
-By running a smoke test in a real Kubernetes cluster, this workflow validates that the image can be pulled, started, and respond to basic requests in a production-like environment, increasing confidence in the deployment process.
 # Learning GHA and CI Automation with docker
 
 This repo is a "vile replication" of Bret Fisher's [docker-ci-automation](https://github.com/BretFisher/docker-ci-automation). It's me following step by step process on how to build a continuos integration workflow, which it's something I've interacted before, but with other tools and not me in the role of a CI workflow builder or maintainer (a simple developer hoping his PR not to fail any tests T.T). It's my first time working with Github Actions, so I'll be detailing the whats,whys, and hows of the workflows I'll be working with to be used for further references to whom might find it insterested (mostly for myself, please go check Bret Fisher's repo).
@@ -204,3 +178,29 @@ This workflow introduces automated integration testing to the CI pipeline using 
   - `docker compose -f docker-compose.test.yml up --exit-code-from test_suite`: Runs the integration test suite defined in the `docker-compose.test.yml` file and exits with the status of the `test_suite` service.
 
 By running integration tests in a Docker Compose environment, this workflow ensures that your application and its dependencies interact correctly, increasing confidence in the system as a whole before deployment.
+
+### 10-add-k8s-test.yaml
+
+**Purpose:**  
+This workflow introduces automated smoke testing of the Docker image in a real Kubernetes environment using k3d. It ensures that the image can be deployed and started successfully in a Kubernetes cluster, and that basic functionality is verified before the image is pushed to Docker Hub.
+
+**New Steps and Features:**
+- **Login to GHCR:**  
+  Authenticates to GitHub Container Registry (GHCR) to push the built image for use in the Kubernetes cluster.
+- **Docker Build and push to GHCR:**  
+  Builds the Docker image using the `test` stage, tags it for GHCR, and pushes it to the registry. The image is also loaded locally for immediate use in the k3d cluster.
+  - `tags: ghcr.io/andjim/docker-ci-automation:${{ github.run_id }}`: Tags the image for the current run.
+  - `push: true`, `load: true`: Pushes to GHCR and loads locally for k3d.
+- **Setup K3d:**  
+  Uses the `AbsaOSS/k3d-action` to create a lightweight Kubernetes cluster in Docker for testing.
+  - `cluster-name: "test-cluster"`: Names the test cluster.
+  - `args`: Configures the cluster (e.g., disables default load balancer and metrics server).
+- **Deploy to K3d:**  
+  - Creates a Kubernetes secret for pulling the image from GHCR.
+  - Uses `envsubst` to inject the image tag into the deployment manifest.
+  - Applies the manifest and waits for the deployment to roll out.
+  - Runs a smoke test by executing a `curl` command inside the deployed pod to verify the `/date` endpoint is reachable and functional.
+- **Kubernetes Manifest:**  
+  A new `manifests/deployment.yaml` file defines the deployment for the application, using the image built in the workflow.
+
+By running a smoke test in a real Kubernetes cluster, this workflow validates that the image can be pulled, started, and respond to basic requests in a production-like environment, increasing confidence in the deployment process.
