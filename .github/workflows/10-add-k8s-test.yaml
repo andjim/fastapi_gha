@@ -60,7 +60,7 @@ jobs:
             --no-lb
             --k3s-arg "--no-deploy=traefik,servicelb,metrics-server@server:*"
 
-      -name: Test something
+      - name: Test something
         run: |
           export TESTING_IMAGE=ghcr.io/andjim/docker-ci-automation:"$GITHUB_RUN_ID"
           envsubst < manifests/deployment.yaml | cat
