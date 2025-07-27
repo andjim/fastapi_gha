@@ -1,0 +1,24 @@
+# kubernetes deployment
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dateapi
+  labels:
+    app: dateapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dateapi
+  template:
+    metadata:
+      labels:
+        app: dateapi
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: dateapi
+          image: "${TESTING_IMAGE}"
+          imagePullPolicy: IfNotPresent
