@@ -69,7 +69,7 @@ jobs:
           export TESTING_IMAGE=ghcr.io/andjim/docker-ci-automation:${{ github.run_id }}
           envsubst < manifests/deployment.yaml | kubectl apply -f -
           kubectl rollout status deployment dateapi
-          kubectl exec deploy/dateapi -- curl --fail http://localhost:8000/ date
+          kubectl exec deploy/dateapi -- curl --fail http://localhost:8000/date
 
       - name: Add Metadata
         id: docker_meta

@@ -22,3 +22,5 @@ spec:
         - name: dateapi
           image: "${TESTING_IMAGE}"
           imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
