@@ -45,7 +45,7 @@ jobs:
         with:
           push: true
           load: true 
-          tags: ghcr.io/andjim/docker-ci-automation:${{ github.run_id }}
+          tags: ghcr.io/fastapigha/docker-ci-automation:${{ github.run_id }}
           target: test
           cache-from: type=gha
           cache-to: type=gha,mode=max
