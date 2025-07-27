@@ -21,9 +21,9 @@ FROM base AS test
 # This stage is for running tests and development dependencies
 COPY ./requirements-dev.txt  .
 COPY ./test_main.py  .
-RUN apt-get install apache2-utils
+RUN apt-get install curl -y
 RUN pip install -r requirements-dev.txt
 CMD ["fastapi","dev","main.py"]
 #============================================================
-FROM base as final
+FROM base AS final
 CMD ["fastapi","run","main.py"]
