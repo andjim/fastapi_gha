@@ -21,6 +21,7 @@ FROM base AS test
 # This stage is for running tests and development dependencies
 COPY ./requirements-dev.txt  .
 COPY ./test_main.py  .
+RUN apt-get install apache2-utils
 RUN pip install -r requirements-dev.txt
 CMD ["fastapi","dev","main.py"]
 #============================================================
