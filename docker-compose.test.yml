@@ -1,0 +1,12 @@
+services:
+  dateapi:
+    image: "${TESTING_IMAGE}"
+    ports:
+      - "80:8000"
+
+  test_suite:
+    image: "${TESTING_IMAGE}"
+    depends_on:
+      dateapi:
+        condition: service_started
+    command: pytest
