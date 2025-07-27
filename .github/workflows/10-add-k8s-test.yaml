@@ -62,7 +62,7 @@ jobs:
 
       - name: Test something
         run: |
-          export TESTING_IMAGE=ghcr.io/andjim/docker-ci-automation:"$GITHUB_RUN_ID"
+          export TESTING_IMAGE=ghcr.io/fastapigha/docker-ci-automation:"$GITHUB_RUN_ID"
           envsubst < manifests/deployment.yaml | cat
       
       - name: Deploy to K3d
@@ -71,7 +71,7 @@ jobs:
             --docker-server=https://ghcr.io \
             --docker-username=${{ github.actor }} \
             --docker-password=${{ secrets.GHCR_TOKEN }}
-          export TESTING_IMAGE=ghcr.io/andjim/docker-ci-automation:"$GITHUB_RUN_ID"
+          export TESTING_IMAGE=ghcr.io/fastapigha/docker-ci-automation:"$GITHUB_RUN_ID"
           envsubst < manifests/deployment.yaml | kubectl apply -f -
           kubectl rollout status deployment dateapi
           kubectl logs deploy/dateapi
