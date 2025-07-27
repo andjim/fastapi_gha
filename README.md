@@ -162,3 +162,19 @@ This workflow adds automated unit testing to the CI pipeline using Docker. It en
   - `docker run --rm ${{ github.run_id }}`: Runs the container and removes it after completion.
 
 By running tests inside the Docker image, this workflow ensures that tests are executed in an environment identical to production, increasing reliability and confidence in the build process.
+
+### 09-add-integration-testing.yaml
+
+**Purpose:**  
+This workflow introduces automated integration testing to the CI pipeline using Docker Compose. It ensures that integration tests are executed in a multi-container environment, simulating real-world scenarios and interactions between services before the image is pushed.
+
+**New Steps and Features:**
+- **Docker Build for Testing:**  
+  Builds the Docker image using the `test` stage, which includes all development and test dependencies, and loads it into the local Docker daemon. The image is tagged with the GitHub run ID and built for the `linux/amd64` platform.
+  - `target: test`: Uses the dedicated test stage in the Dockerfile, which installs test dependencies and copies test files.
+  - `load: true`: Loads the image into the local Docker daemon for running tests.
+- **Run Testing in Docker (Integration Tests):**  
+  Executes integration tests using Docker Compose, allowing multiple containers to be orchestrated together. The workflow will fail if the integration test suite fails, preventing untested or broken code from being published.
+  - `docker compose -f docker-compose.test.yml up --exit-code-from test_suite`: Runs the integration test suite defined in the `docker-compose.test.yml` file and exits with the status of the `test_suite` service.
+
+By running integration tests in a Docker Compose environment, this workflow ensures that your application and its dependencies interact correctly, increasing confidence in the system as a whole before deployment.
