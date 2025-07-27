@@ -15,16 +15,14 @@ RUN apt-get update && apt-get install -y \
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
+EXPOSE 8000
 #============================================================
 FROM base AS test
 # This stage is for running tests and development dependencies
 COPY ./requirements-dev.txt  .
 COPY ./test_main.py  .
 RUN pip install -r requirements-dev.txt
-
-ENTRYPOINT [ "pytest" ]
+CMD ["fastapi","dev","main.py"]
 #============================================================
 FROM base as final
-
-EXPOSE 8000
-CMD ["fastapi","run","main.py"] 
+CMD ["fastapi","run","main.py"]
