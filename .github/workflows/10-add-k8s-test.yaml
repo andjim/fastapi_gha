@@ -45,7 +45,7 @@ jobs:
         with:
           push: true
           load: true 
-          tags: ghcr.io/fastapigha/docker-ci-automation:${{ github.run_id }}
+          tags: ghcr.io/andjim/docker-ci-automation:${{ github.run_id }}
           target: test
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -62,8 +62,13 @@ jobs:
 
       - name: Test something
         run: |
-          export TESTING_IMAGE=ghcr.io/fastapigha/docker-ci-automation:"$GITHUB_RUN_ID"
+          export TESTING_IMAGE=ghcr.io/andjim/docker-ci-automation:"$GITHUB_RUN_ID"
           envsubst < manifests/deployment.yaml | cat
+
+      - name: Test something docker run
+        run: |
+          export TESTING_IMAGE=ghcr.io/andjim/docker-ci-automation:"$GITHUB_RUN_ID"
+          docker run --rm $TESTING_IMAGE pytest
       
       - name: Deploy to K3d
         run: |
@@ -71,7 +76,7 @@ jobs:
             --docker-server=https://ghcr.io \
             --docker-username=${{ github.actor }} \
             --docker-password=${{ secrets.GHCR_TOKEN }}
-          export TESTING_IMAGE=ghcr.io/fastapigha/docker-ci-automation:"$GITHUB_RUN_ID"
+          export TESTING_IMAGE=ghcr.io/andjim/docker-ci-automation:"$GITHUB_RUN_ID"
           envsubst < manifests/deployment.yaml | kubectl apply -f -
           kubectl rollout status deployment dateapi
           kubectl logs deploy/dateapi
