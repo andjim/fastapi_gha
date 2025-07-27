@@ -23,7 +23,7 @@ COPY ./requirements-dev.txt  .
 COPY ./test_main.py  .
 RUN apt-get install curl -y
 RUN pip install -r requirements-dev.txt
-CMD ["fastapi","dev","main.py"]
+CMD ["fastapi","dev","main.py", "--host", "0.0.0.0", "--port", "8000"]
 #============================================================
 FROM base AS final
-CMD ["fastapi","run","main.py"]
+CMD ["fastapi","run","main.py", "--host", "0.0.0.0", "--port", "8000"]
