@@ -57,7 +57,7 @@ jobs:
       - name: Run Tests
         run: |
           export TESTING_IMAGE=ghcr.io/andjim/docker-ci-automation:"$GITHUB_RUN_ID"
-          docker docker compose -f docker-compose.test.yml up --exit-code-from test_suite
+          docker compose -f docker-compose.test.yml up --exit-code-from test_suite
 
   vulnerability-scan:
     name: Vulnerability Scan
