@@ -14,9 +14,7 @@ jobs:
       packages: write
     steps:
       - name: Checkout code
-        # This action checks out your repository under $GITHUB_WORKSPACE, so your job can access it.
-        # It is a required step for any workflow that uses actions/checkout@v3
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
 
       - name: Install Rust toolchain
         run: |
@@ -97,7 +95,7 @@ jobs:
     steps:
 
       - name: Checkout code
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
 
       - name: Setup K3d
         uses: AbsaOSS/k3d-action@v2
