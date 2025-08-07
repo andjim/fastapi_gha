@@ -65,8 +65,9 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Run Tests
+        env:
+          TESTING_IMAGE: ${{ env.TESTING_IMAGE }}
         run: |
-          export TESTING_IMAGE=${{ env.TESTING_IMAGE }}
           docker compose -f docker-compose.test.yml up --exit-code-from test_suite
 
   vulnerability-scan:
@@ -113,12 +114,13 @@ jobs:
             --k3s-arg "--no-deploy=traefik,servicelb,metrics-server@server:*"
 
       - name: Deploy to K3d
+        env:
+          TESTING_IMAGE: ${{ env.TESTING_IMAGE }}
         run: |
           kubectl create secret docker-registry regcred \
             --docker-server=https://ghcr.io \
             --docker-username=${{ github.actor }} \
             --docker-password=${{ secrets.GHCR_TOKEN }}
-          export TESTING_IMAGE=${{ env.TESTING_IMAGE }}
           envsubst < manifests/deployment.yaml | kubectl apply -f -
           kubectl rollout status deployment dateapi
           kubectl exec deploy/dateapi -- curl --fail http://localhost:8000/date
